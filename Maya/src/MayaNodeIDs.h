@@ -8,4 +8,4 @@
  * This code is licensed under the MIT license, check the LICENSE.txt in the repo root.
 */
 #pragma once
-#define URN_NODE_TWIST			0x1337A
+#define URN_NODE_TWIST_ID			0x1337A

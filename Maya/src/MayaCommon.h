@@ -13,3 +13,11 @@
 #include <maya/MPxNode.h>
 #include <maya/MFnUnitAttribute.h>
 #include <maya/MFnNumericAttribute.h>
+#include <maya/MFnMatrixAttribute.h>
+#include <maya/MFnCompoundAttribute.h>
+
+#include <maya/MFloatVector.h>
+#include <maya/MFloatMatrix.h>
+#include <maya/MQuaternion.h>
+#include <maya/MMatrix.h>
+#include <maya/MVector.h>
