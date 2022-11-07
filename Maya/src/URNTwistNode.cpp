@@ -60,31 +60,26 @@ MStatus URNTwistNode::compute(const MPlug &plug, MDataBlock &data)
 	const MMatrix inOffsetMatrix = data.inputValue(attr::inOffsetMatrix).asMatrix();
 	const float twistPercent = data.inputValue(attr::inTwistPercent).asFloat();
 
-#if 0
-	// acos axis-angle implementation of lookat
-	const MVector forward = targetLocalMatrix[0];
-	const MVector axis = MVector(1.0f, 0.0f, 0.0f) ^ forward;
-	const double angle = acos(dot(axis.normal(), MVector(1.0f, 0.0f, 0.0f)));
-
-	const MMatrix outOffsetMatrix = MQuaternion(angle, axis).asMatrix() * inOffsetMatrix;
-	//const MMatrix outOffsetMatrix = MQuaternion(angle, MVector(1.0f, 0.0f, 0.0f)).inverse().asMatrix() * inOffsetMatrix;
-#else
-	// Simple implementation of lookat
+	// Simple implementation of lookat-based twist
 	const MVector forward = MVector(1.0f, 0.0f, 0.0f);
 	const MVector up = targetLocalMatrix[2];
 	const MVector across = (up ^ forward).normal();
 	const MVector upOrtho = (forward ^ across).normal();
 
-	const double offsetMatrixData[4][4] = {
+	const double rotMatrixData[4][4] = {
 		forward.x, forward.y, forward.z, 0.0f,
 		across.x, across.y, across.z, 0.0f,
 		upOrtho.x, upOrtho.y, upOrtho.z, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
-	const MMatrix offsetMatrix(offsetMatrixData);
+	const MMatrix rotMatrix(rotMatrixData);
+	const MQuaternion rot = MTransformationMatrix(rotMatrix).rotation();
+	const MEulerRotation rotEuler = rot.asEulerRotation();
+	const MEulerRotation finalRotEuler(rotEuler.x * double(twistPercent), 0.0, 0.0);
+
+	const MMatrix offsetMatrix = finalRotEuler.asMatrix();
 
 	const MMatrix outOffsetMatrix = offsetMatrix * inOffsetMatrix;
-#endif
 
 	data.outputValue(attr::outOffsetMatrix).setMMatrix(outOffsetMatrix);
 

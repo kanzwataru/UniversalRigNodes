@@ -21,3 +21,4 @@
 #include <maya/MQuaternion.h>
 #include <maya/MMatrix.h>
 #include <maya/MVector.h>
+#include <maya/MEulerRotation.h>
