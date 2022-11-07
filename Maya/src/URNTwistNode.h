@@ -14,12 +14,9 @@ class URNTwistNode : public MPxNode
 	struct attr {
 		static MObject inTargetLocalMatrix;		// The local matrix of the target joint (e.g. wrist)
 
-		struct twist {
-			static MObject inTwistPercent;		// The amount (in 0.0 - 1.0) to apply the target's rotation.
-			static MObject inOffsetMatrix;		// If this controller has another procedural node affecting it, connect it here.
-			static MObject outOffsetMatrix;		// The result of adding the twist, for connecting to offsetParentMatrix.
-		};
-		static MObject twistBones;
+		static MObject inTwistPercent;			// The amount (in 0.0 - 1.0) to apply the target's rotation.
+		static MObject inOffsetMatrix;			// If this controller has another procedural node affecting it, connect it here.
+		static MObject outOffsetMatrix;			// The result of adding the twist, for connecting to offsetParentMatrix.
 	};
 
 public:
