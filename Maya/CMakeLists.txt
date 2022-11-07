@@ -16,6 +16,8 @@ file(GLOB SOURCE_FILES
 	../Core/*.cpp
 )
 
+set(INCLUDE_DIRS ../Extern/glm ../Core)
+
 # PART 4 - Specify the libraries in the devkit 
 set(LIBRARIES
   #OpenMaya Foundation OpenMayaAnim OpenMayaFX OpenMayaRender OpenMayaUI
