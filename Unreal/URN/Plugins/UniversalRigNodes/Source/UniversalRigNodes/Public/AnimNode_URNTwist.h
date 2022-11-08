@@ -34,7 +34,12 @@ struct UNIVERSALRIGNODES_API FAnimNode_URNTwist : public FAnimNode_Base
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 	TArray<FTwistBoneEntry> TwistBones;
-		
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings, meta = (PinShownByDefault, DisplayAfter = "Source"))
+	float Alpha = 1.0f;
+
+	bool bIsValid = true;
+
 	// FAnimNode_Base interface begin
 	virtual void Initialize_AnyThread(const FAnimationInitializeContext &Context) override;
 	virtual void CacheBones_AnyThread(const FAnimationCacheBonesContext &Context) override;
