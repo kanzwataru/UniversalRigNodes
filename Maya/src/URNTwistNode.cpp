@@ -4,7 +4,7 @@
 */
 #include "URNTwistNode.h"
 #include "MayaNodeIDs.h"
-#include "UniversalRigNodes.h"
+#include "URN.h"
 
 MTypeId URNTwistNode::typeId(URN_NODE_TWIST_ID);
 MObject URNTwistNode::attr::inTargetLocalMatrix;
