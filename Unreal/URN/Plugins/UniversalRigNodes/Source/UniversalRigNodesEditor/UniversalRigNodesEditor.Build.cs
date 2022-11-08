@@ -1,8 +1,8 @@
 using UnrealBuildTool;
 
-public class UniversalRigNodes : ModuleRules
+public class UniversalRigNodesEditor : ModuleRules
 {
-	public UniversalRigNodes(ReadOnlyTargetRules Target) : base(Target)
+	public UniversalRigNodesEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -16,8 +16,6 @@ public class UniversalRigNodes : ModuleRules
 		PrivateIncludePaths.AddRange(
 			new string[] {
 				// ... add other private include paths required here ...
-				"../../../../../Core",
-				"../../../../../Extern/glm"
 			}
 			);
 			
@@ -36,7 +34,13 @@ public class UniversalRigNodes : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"AnimGraphRuntime"
+				"UniversalRigNodes",
+				"AnimGraph",
+				"BlueprintGraph",
+				"AnimGraphRuntime",
+				"UnrealEd",
+				"SlateCore",
+				"EditorFramework"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

@@ -19,6 +19,11 @@
 			"Name": "UniversalRigNodes",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UniversalRigNodesEditor",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "PreDefault"
 		}
 	]
 }
