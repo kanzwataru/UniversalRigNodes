@@ -19,25 +19,25 @@ MStatus URNTwistNode::initialize()
 	MFnNumericAttribute numAttr;
 	MFnCompoundAttribute compoundAttr;
 
-	attr::inTargetLocalMatrix = matrixAttr.create("inTargetLocalMatrix", "itlm", MFnMatrixAttribute::kFloat);
+	attr::inTargetLocalMatrix = matrixAttr.create("inTargetLocalMatrix", "itlm");
 	matrixAttr.setReadable(false);
 	matrixAttr.setWritable(true);
 	matrixAttr.setStorable(false);
 	VERIFY(addAttribute(attr::inTargetLocalMatrix));
 
-	attr::inTwistPercent = numAttr.create("inTwistPercent", "itp", MFnNumericData::Type::kFloat, 0.0);
+	attr::inTwistPercent = numAttr.create("inTwistPercent", "itp", MFnNumericData::Type::kDouble, 0.5);
 	numAttr.setReadable(false);
 	numAttr.setWritable(true);
 	numAttr.setStorable(true);
 	VERIFY(addAttribute(attr::inTwistPercent));
 	
-	attr::inOffsetMatrix = matrixAttr.create("inOffsetMatrix", "iom", MFnMatrixAttribute::kFloat);
+	attr::inOffsetMatrix = matrixAttr.create("inOffsetMatrix", "iom");
 	matrixAttr.setReadable(true);
 	matrixAttr.setWritable(true);
 	matrixAttr.setStorable(true);
 	VERIFY(addAttribute(attr::inOffsetMatrix));
 
-	attr::outOffsetMatrix = matrixAttr.create("outOffsetMatrix", "oom", MFnMatrixAttribute::kFloat);
+	attr::outOffsetMatrix = matrixAttr.create("outOffsetMatrix", "oom");
 	matrixAttr.setReadable(true);
 	matrixAttr.setWritable(false);
 	matrixAttr.setStorable(false);
@@ -61,37 +61,16 @@ MStatus URNTwistNode::compute(const MPlug &plug, MDataBlock &data)
 		return MStatus::kUnknownParameter;
 	}
 
-	const MFloatMatrix targetLocalMatrix = data.inputValue(attr::inTargetLocalMatrix).asFloatMatrix();
-	const MFloatMatrix inOffsetMatrix = data.inputValue(attr::inOffsetMatrix).asFloatMatrix();
-	const float twistPercent = data.inputValue(attr::inTwistPercent).asFloat();
+	const MMatrix targetLocalMatrix = data.inputValue(attr::inTargetLocalMatrix).asMatrix();
+	const MMatrix inOffsetMatrix = data.inputValue(attr::inOffsetMatrix).asMatrix();
+	const double twistPercent = data.inputValue(attr::inTwistPercent).asDouble();
 
-#if 0
-	// Simple implementation of lookat-based twist
-	const MVector forward = MVector(1.0f, 0.0f, 0.0f);
-	const MVector up = targetLocalMatrix[2];
-	const MVector across = (up ^ forward).normal();
-	const MVector upOrtho = (forward ^ across).normal();
-
-	const double rotMatrixData[4][4] = {
-		forward.x, forward.y, forward.z, 0.0f,
-		across.x, across.y, across.z, 0.0f,
-		upOrtho.x, upOrtho.y, upOrtho.z, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	const MFloatMatrix rotMatrix(rotMatrixData);
-	const MQuaternion rot = MTransformationMatrix(rotMatrix).rotation();
-	const MEulerRotation rotEuler = rot.asEulerRotation();
-	const MEulerRotation finalRotEuler(rotEuler.x * double(twistPercent), 0.0, 0.0);
-
-	const MFloatMatrix offsetMatrix = finalRotEuler.asMatrix();
-#else
-	MFloatMatrix offsetMatrix;
+	MMatrix offsetMatrix;
 	URN_calc_twist(&offsetMatrix[0][0], &targetLocalMatrix[0][0], twistPercent);
-#endif
 
-	const MFloatMatrix outOffsetMatrix = offsetMatrix * inOffsetMatrix;
+	const MMatrix outOffsetMatrix = offsetMatrix * inOffsetMatrix;
 
-	data.outputValue(attr::outOffsetMatrix).setMFloatMatrix(outOffsetMatrix);
+	data.outputValue(attr::outOffsetMatrix).setMMatrix(outOffsetMatrix);
 
 	return MStatus::kSuccess;
 }

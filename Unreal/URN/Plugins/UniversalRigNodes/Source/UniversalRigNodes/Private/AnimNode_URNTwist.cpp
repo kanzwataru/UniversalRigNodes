@@ -5,6 +5,7 @@
 #include "AnimNode_URNTwist.h"
 #include "AnimationRuntime.h"
 #include "Animation/AnimInstanceProxy.h"
+#include "URN.h"
 
 void FAnimNode_URNTwist::Initialize_AnyThread(const FAnimationInitializeContext &Context)
 {
@@ -48,13 +49,18 @@ void FAnimNode_URNTwist::Evaluate_AnyThread(FPoseContext &Output)
 	}
 
 	const FBoneContainer& BoneContainer = Output.AnimInstanceProxy->GetRequiredBones();
-
+	
 	// TEMP: Just checking if the bones can be moved properly, for now
+	const FMatrix TargetMatrix = Output.Pose[TargetBone.GetCompactPoseIndex(BoneContainer)].GetRotation().ToMatrix();
 	for(auto &Entry : TwistBones) {
 		auto BoneIdx = Entry.Bone.GetCompactPoseIndex(BoneContainer);
 
 		auto &OutTransform = Output.Pose[BoneIdx];
-		OutTransform.SetRotation(FRotator(0.0f, 0.0f, 15.0f * Alpha).Quaternion() * OutTransform.GetRotation());
+
+		FMatrix OffsetMatrix;
+		URN_calc_twist(&OffsetMatrix.M[0][0], &TargetMatrix.M[0][0], Entry.TwistBlend * Alpha);
+
+		OutTransform.SetRotation(FQuat(OffsetMatrix)); // TODO PERF: Avoid conversion through quaternion
 	}
 }
 

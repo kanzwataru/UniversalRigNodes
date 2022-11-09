@@ -17,9 +17,9 @@ extern "C" {
 #endif
 
 void URN_calc_twist(
-	float		*out_offset_matrix,
-	const float *in_target_local_matrix,
-	float		 twist_blend
+	double		 *out_offset_matrix,
+	const double *in_target_local_matrix,
+	double		  twist_blend
 );
 
 #ifdef __cplusplus
